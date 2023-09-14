@@ -1,5 +1,5 @@
 repos:
-  - repo: https://github.com/norwoodj/helm-docs
+  - repo: https://github.com/pluralsh/helm-docs
     rev: v1.2.0
     hooks:
       - id: helm-docs

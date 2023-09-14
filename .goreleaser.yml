@@ -45,8 +45,8 @@ signs:
 
 nfpms:
 - vendor: helm-docs
-  homepage: https://github.com/norwoodj/helm-docs
-  maintainer: norwoodj
+  homepage: https://github.com/pluralsh/helm-docs
+  maintainer: pluralsh
   description: A tool for automatically generating markdown documentation for helm charts
   license: GNU General Public License v3.0
   formats:
@@ -62,10 +62,10 @@ nfpms:
 
 brews:
   - repository:
-      owner: norwoodj
+      owner: pluralsh
       name: homebrew
     folder: Formula
-    homepage: https://github.com/norwoodj/helm-docs
+    homepage: https://github.com/pluralsh/helm-docs
     description: Automatically generate markdown documentation for helm charts
     install: |
       bin.install "helm-docs"
