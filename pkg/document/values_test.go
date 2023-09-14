@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pluralsh/helm-docs/pkg/helm"
+	"github.com/norwoodj/helm-docs/pkg/helm"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v3"
 )

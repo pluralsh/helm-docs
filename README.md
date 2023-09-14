@@ -1,6 +1,6 @@
 helm-docs
 =========
-[![Go Report Card](https://goreportcard.com/badge/github.com/pluralsh/helm-docs)](https://goreportcard.com/report/github.com/pluralsh/helm-docs)
+[![Go Report Card](https://goreportcard.com/badge/github.com/norwoodj/helm-docs)](https://goreportcard.com/report/github.com/norwoodj/helm-docs)
 
 The helm-docs tool auto-generates documentation from helm charts into markdown files. The resulting
 files contain metadata about their respective chart and a table with each of the chart's values, their defaults, and an
@@ -17,7 +17,7 @@ config:
     # -- default database for storage of database metadata
     - postgres
 
-    # -- database for the [hashbash](https://github.com/pluralsh/hashbash-backend-go) project
+    # -- database for the [hashbash](https://github.com/norwoodj/hashbash-backend-go) project
     - hashbash
 
   usersToCreate:
@@ -44,7 +44,7 @@ Resulting in a resulting README section like so:
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | config.databasesToCreate[0] | string | `"postgresql"` | default database for storage of database metadata |
-| config.databasesToCreate[1] | string | `"hashbash"` | database for the [hashbash](https://github.com/pluralsh/hashbash-backend-go) project |
+| config.databasesToCreate[1] | string | `"hashbash"` | database for the [hashbash](https://github.com/norwoodj/hashbash-backend-go) project |
 | config.usersToCreate[0] | object | `{"admin":true,"name":"root"}` | admin user |
 | config.usersToCreate[1] | object | `{"name":"hashbash","readwriteDatabases":["hashbash"]}` | user with access to the database with the same name |
 | statefulset.extraVolumes | list | `[{"emptyDir":{},"name":"data"}]` | Additional volumes to be mounted into the database container |
@@ -59,7 +59,7 @@ the final table will be described in detail later in this document.
 helm-docs can be installed using [homebrew](https://brew.sh/):
 
 ```bash
-brew install pluralsh/tap/helm-docs
+brew install norwoodj/tap/helm-docs
 ```
 
 or [scoop](https://scoop.sh):
@@ -68,7 +68,7 @@ or [scoop](https://scoop.sh):
 scoop install helm-docs
 ```
 
-This will download and install the [latest release](https://github.com/pluralsh/helm-docs/releases/latest)
+This will download and install the [latest release](https://github.com/norwoodj/helm-docs/releases/latest)
 of the tool.
 
 To build from source in this repository:
@@ -81,7 +81,7 @@ go build
 Or install from source:
 
 ```bash
-GO111MODULE=on go get github.com/pluralsh/helm-docs/cmd/helm-docs
+GO111MODULE=on go get github.com/norwoodj/helm-docs/cmd/helm-docs
 ```
 
 ## Usage

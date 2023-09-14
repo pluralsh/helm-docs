@@ -15,8 +15,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/pluralsh/helm-docs/pkg/document"
-	"github.com/pluralsh/helm-docs/pkg/helm"
+	"github.com/norwoodj/helm-docs/pkg/document"
+	"github.com/norwoodj/helm-docs/pkg/helm"
 )
 
 // parallelProcessIterable runs the visitFn function on each element of the iterable, using

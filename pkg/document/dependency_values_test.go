@@ -4,12 +4,12 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/pluralsh/helm-docs/pkg/helm"
+	"github.com/norwoodj/helm-docs/pkg/helm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
-	. "github.com/pluralsh/helm-docs/pkg/document"
+	. "github.com/norwoodj/helm-docs/pkg/document"
 )
 
 func TestGetDependencyValues(t *testing.T) {

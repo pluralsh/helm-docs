@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/viper"
 
-	"github.com/pluralsh/helm-docs/pkg/document"
+	"github.com/norwoodj/helm-docs/pkg/document"
 )
 
 // BenchmarkHelmDocs benchmarks the entire helm-docs command by running on testdata.
