@@ -10,5 +10,6 @@ dependencies:
     version: 0.1.0
   - name: sub-c
     version: 0.1.0
+    repository: https://some.chart.repository
   - name: library
     version: 0.1.0

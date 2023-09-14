@@ -1,4 +1,4 @@
-helm-docs:
+build:
 	go build github.com/norwoodj/helm-docs/cmd/helm-docs
 
 install:

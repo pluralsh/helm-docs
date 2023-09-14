@@ -35,7 +35,7 @@ func untarChartDependencies(subchart, filename string) (string, error) {
 	}
 	defer f.Close()
 
-	return dir, untar(dir, f)
+	return filepath.Join(dir, subchart), untar(dir, f)
 }
 
 func getDependencyValuesWithPrefix(root helm.ChartDocumentationInfo, allChartInfoByChartPath map[string]helm.ChartDocumentationInfo, prefix string) ([]DependencyValues, error) {
@@ -51,12 +51,19 @@ func getDependencyValuesWithPrefix(root helm.ChartDocumentationInfo, allChartInf
 		if strings.HasPrefix(dep.Repository, "file://") {
 			searchPath = filepath.Join(root.ChartDirectory, strings.TrimPrefix(dep.Repository, "file://"))
 		} else if dep.Repository != "" {
-			chartTgzPath := filepath.Join(root.ChartDirectory, "charts", fmt.Sprintf("%s-%s.tgz", dep.Repository, dep.Version))
+			chartTgzPath := filepath.Join(root.ChartDirectory, "charts", fmt.Sprintf("%s-%s.tgz", dep.Name, dep.Version))
+			log.Infof("checking for tgz file %s", chartTgzPath)
 			if fileExists(chartTgzPath) {
 				var err error
-				searchPath, err = untarChartDependencies(dep.Repository, chartTgzPath)
+				searchPath, err = untarChartDependencies(dep.Name, chartTgzPath)
+				defer os.RemoveAll(filepath.Dir(searchPath))
 				if err != nil {
+					log.Warnf("Failed to untar and find dependencies %s", err)
 					continue
+				}
+				info, err := helm.ParseChartInformation(searchPath, helm.ChartValuesDocumentationParsingConfig{})
+				if err == nil {
+					allChartInfoByChartPath[searchPath] = info
 				}
 			} else {
 				log.Warnf("Chart in %q has a remote dependency %q. Dependency values will not be included.", root.ChartDirectory, dep.Name)

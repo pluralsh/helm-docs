@@ -3,10 +3,26 @@ package document
 import (
 	"archive/tar"
 	"compress/gzip"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 )
+
+func makeDir(target string, made map[string]bool) error {
+	if made[target] {
+		return nil
+	}
+
+	if _, err := os.Stat(target); err != nil {
+		if err := os.MkdirAll(target, 0755); err != nil {
+			return err
+		}
+	}
+
+	made[target] = true
+	return nil
+}
 
 func untar(dst string, r io.Reader) error {
 	gzr, err := gzip.NewReader(r)
@@ -16,6 +32,7 @@ func untar(dst string, r io.Reader) error {
 	defer gzr.Close()
 
 	tr := tar.NewReader(gzr)
+	madeDir := map[string]bool{}
 
 	for {
 		header, err := tr.Next()
@@ -37,7 +54,6 @@ func untar(dst string, r io.Reader) error {
 
 		// the target location where the dir/file should be created
 		target := filepath.Join(dst, header.Name)
-
 		// the following switch could also be done using fi.Mode(), not sure if there
 		// a benefit of using one vs. the other.
 		// fi := header.FileInfo()
@@ -47,16 +63,19 @@ func untar(dst string, r io.Reader) error {
 
 		// if its a dir and it doesn't exist create it
 		case tar.TypeDir:
-			if _, err := os.Stat(target); err != nil {
-				if err := os.MkdirAll(target, 0755); err != nil {
-					return err
-				}
+			if err := makeDir(target, madeDir); err != nil {
+				return err
 			}
 
 		// if it's a file create it
 		case tar.TypeReg:
+			if err := makeDir(filepath.Dir(target), madeDir); err != nil {
+				return err
+			}
+
 			f, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR, os.FileMode(header.Mode))
 			if err != nil {
+				fmt.Println("could not open file")
 				return err
 			}
 
