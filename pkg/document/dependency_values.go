@@ -1,6 +1,9 @@
 package document
 
 import (
+	"fmt"
+	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -20,6 +23,21 @@ func GetDependencyValues(root helm.ChartDocumentationInfo, allChartInfoByChartPa
 	return getDependencyValuesWithPrefix(root, allChartInfoByChartPath, "")
 }
 
+func untarChartDependencies(subchart, filename string) (string, error) {
+	dir, err := ioutil.TempDir("", subchart)
+	if err != nil {
+		return "", err
+	}
+
+	f, err := os.Open(filename)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	return dir, untar(dir, f)
+}
+
 func getDependencyValuesWithPrefix(root helm.ChartDocumentationInfo, allChartInfoByChartPath map[string]helm.ChartDocumentationInfo, prefix string) ([]DependencyValues, error) {
 	if len(root.Dependencies) == 0 {
 		return nil, nil
@@ -33,8 +51,17 @@ func getDependencyValuesWithPrefix(root helm.ChartDocumentationInfo, allChartInf
 		if strings.HasPrefix(dep.Repository, "file://") {
 			searchPath = filepath.Join(root.ChartDirectory, strings.TrimPrefix(dep.Repository, "file://"))
 		} else if dep.Repository != "" {
-			log.Warnf("Chart in %q has a remote dependency %q. Dependency values will not be included.", root.ChartDirectory, dep.Name)
-			continue
+			chartTgzPath := filepath.Join(root.ChartDirectory, "charts", fmt.Sprintf("%s-%s.tgz", dep.Repository, dep.Version))
+			if fileExists(chartTgzPath) {
+				var err error
+				searchPath, err = untarChartDependencies(dep.Repository, chartTgzPath)
+				if err != nil {
+					continue
+				}
+			} else {
+				log.Warnf("Chart in %q has a remote dependency %q. Dependency values will not be included.", root.ChartDirectory, dep.Name)
+				continue
+			}
 		} else {
 			searchPath = filepath.Join(root.ChartDirectory, "charts", dep.Name)
 		}

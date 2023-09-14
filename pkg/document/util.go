@@ -1,6 +1,8 @@
 package document
 
 import (
+	"os"
+
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 )
@@ -9,6 +11,11 @@ const (
 	AlphaNumSortOrder = "alphanum"
 	FileSortOrder     = "file"
 )
+
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return !os.IsNotExist(err)
+}
 
 // The json library can only marshal maps with string keys, and so all of our lists and maps that go into documentation
 // must be converted to have only string keys before marshalling
