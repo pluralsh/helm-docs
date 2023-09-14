@@ -11,5 +11,8 @@ dependencies:
   - name: sub-c
     version: 0.1.0
     repository: https://some.chart.repository
+  - name: sub-d
+    version: 0.1.0
+    repository: https://some.chart.repository
   - name: library
     version: 0.1.0

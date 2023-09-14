@@ -4,6 +4,6 @@ description: A sub-chart.
 version: "0.1.0"
 type: application
 dependencies:
-  - name: library
+  - name: sub-c
     version: 0.1.0
-    repository: file://../library
+    repository: https://some.chart.repo
